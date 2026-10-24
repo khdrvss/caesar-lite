@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+.state.json
+.state.json.tmp
+.bot.lock
+node_modules/
+*.log
+.kiro/
