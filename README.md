@@ -1,8 +1,7 @@
 # Caesar Lite
 
-Small standalone Caesar: a fixed personality, Telegram chat and one web-search
-service. Optional incoming photos and voice notes. One Node.js file, zero package
-dependencies, no conversation memory, learned personality or session-usage tracking.
+A lightweight Telegram bot with Caesar's Uzbek personality, web search, and
+optional photo and voice input. One Node.js file, zero package dependencies.
 
 ## Run
 
@@ -32,8 +31,7 @@ polling; the application reports that condition rather than changing it for you.
 - Current-information wording also requests search; the model can choose search
   for other questions. This uses at most one search and one final generation.
 - `/help` and `/start` describe enabled features.
-- Every request is independent. Only the current message and its direct Telegram
-  reply are included; nothing is remembered for the next request.
+- Reply directly to a relevant Telegram message to include it as context.
 - Replies are plain text. Source links from the current search appear underneath.
   Model-authored web links absent from search evidence are removed.
 
@@ -47,7 +45,7 @@ direct, dry, informal tone. An explicitly requested other language is allowed.
 - Voice notes: set `TRANSCRIPTION_MODEL` only when the same provider exposes
   compatible `/audio/transcriptions` and supports OGG. In a group, a voice note
   must be a reply to Caesar, or referenced by an addressed text reply.
-- Media stays in memory. One incoming photo or voice note per request; maximum
+- One incoming photo or voice note per request; maximum
   8 MB; voice maximum 120 seconds. Replies remain text. These flags do not certify
   that a provider actually supports media; failures produce a short notice.
 
@@ -56,12 +54,12 @@ direct, dry, informal tone. An explicitly requested other language is allowed.
 The application runs one request at a time, caps work at 60 seconds and allows at
 most 5 more seconds for sending. No unbounded retries or recursive research.
 Search uses Tavily basic search with at most five excerpts. There are no browser,
-vector, database or queue services. Model/service accounts can still charge for
-requests; the bot does not collect, display or persist usage/cost totals.
+vector, database or queue services. Model and search access use your configured
+provider accounts.
 
 The only persistent operational files are `.state.json` (Telegram update cursor)
-and `.bot.lock` (process ID while running). Neither contains messages. The cursor
-is saved **before** handling each update to avoid duplicate processing; a crash
+and `.bot.lock` (process ID while running). The cursor is saved **before**
+handling each update to avoid duplicate processing; a crash
 can lose an in-flight request. Telegram sends are never blindly retried because
 a timeout can occur after delivery. This is not an exactly-once delivery system.
 Do not run multiple processes or share one token with the original Caesar.
